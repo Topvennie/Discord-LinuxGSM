@@ -18,6 +18,10 @@ commands_required_values = ["server_command", "command", "require_path", "strip_
 server_required_values = ["name", "user", "path", "head admin", "admin", "moderator", "commands"]
 server_commands_requires_values = ["name", "user", "command"]
 
+forbidden_server_names = ["restart", "reload", "refresh", "settings", "setting", "setprefix", "set_prefix", "setactivity", "set_activity", "set_activity_type", "set_activity_text", "set_activitytype", "set_activitytext", "setactivitytype", 
+                        "setactivitytext", "setheadadmin", "set_head_admin", "set_headadmin", "setadmin", "set_admin", "setmoderator", "set_moderator", "setembedcolour", "set_embed_colour", "set_embed_color", "set_embedcolour", "set_embedcolor", 
+                        "setembedcolor", "set_colour", "set_color", "setcolour", "setcolor"]
+
 
 ###########
 #  utils  #

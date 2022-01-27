@@ -10,10 +10,6 @@ class Command():
         self.strip = strip
         self.input = self.require_input
 
-    @property
-    def name(self) -> str:
-        return self.name
-
     def require_input(self) -> bool:
         return "{}" in self.command
 

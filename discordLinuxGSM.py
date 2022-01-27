@@ -7,9 +7,9 @@ from config_parser import parse_commands, parse_servers, parse_settings
 from utils import print_to_console
 
 
-###########
-#  utils  #
-###########
+###############
+#  Bot Utils  #
+###############
 
 
 # Returns the bot prefix
@@ -93,7 +93,7 @@ bot = make_bot(settings_data, servers_data)
 
 
 # Reloads both cogs
-@bot.command(aliases=["restart", "reload"])
+@bot.command(name="restart", aliases=["reload"])
 async def _restart(ctx) -> None:
     msg = await send(ctx, "Reloading the bot...")
 
@@ -116,7 +116,7 @@ async def _restart(ctx) -> None:
     await msg.edit(embed=discord.Embed(description="Reloaded bot", color=bot.color))
 
 # Refreshes the server list
-@bot.command(aliases=["refresh"])
+@bot.command(name="refresh")
 async def _refresh(ctx) -> None:
     msg = await send(ctx, "Refreshing all servers...")
 
