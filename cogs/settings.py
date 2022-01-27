@@ -1,4 +1,5 @@
 import json
+from typing import List, Union
 
 import discord
 from discord.ext import commands
@@ -7,8 +8,9 @@ from ..discordLinuxGSM import send
 from ..utils import exit, print_to_console
 
 
+# Class for all the settings
 class Settings(commands.Cog):
-    # Initialises the class
+
     def __init__(self, bot:commands.Bot) -> None:
         self.bot = bot
 
@@ -37,7 +39,7 @@ class Settings(commands.Cog):
 
     # Cog check 
     def cog_check(self, ctx:commands.Context) -> bool:        
-        return ctx.guild == self.bot.guild and (self.bot.head_admin in ctx.author.roles or ctx.author.permissions.administrator)
+        return ctx.guild == self.bot.guild and (self.bot.head_admin in ctx.author.roles or ctx.author.guild_permissions.administrator)
 
 
     ###############
@@ -46,7 +48,7 @@ class Settings(commands.Cog):
 
 
     # Opens settings file and changes the required setting
-    async def change_settings(self, ctx:commands.Context, name:str, value) -> bool:
+    async def change_settings(self, ctx:commands.Context, name:str, value:Union[int, str, List[int, int, int]]) -> bool:
         try:
             with open("./configs/settings.json", "r+") as file:
                 data = json.load(file)
@@ -72,7 +74,7 @@ class Settings(commands.Cog):
     async def _settings(self, ctx:commands.Context) -> None:
         await self.send(ctx, f"""`Prefix:` {self.bot.prefix}
                                 `Discord Server:` {self.bot.guild.name}
-                                `Servers:` {len(self.bot.servers.keys())}
+                                `Servers:` {len(self.bot.servers)}
                                 `Head admin:` {self.bot.head_admin.mention if self.bot.head_admin is not None else 'Not set'}
                                 `Admin:` {self.bot.admin.mention if self.bot.admin is not None else 'Not set'}
                                 `Moderator:` {self.bot.moderator.mention if self.bot.moderator is not None else 'Not set'}""")
@@ -249,7 +251,7 @@ class Settings(commands.Cog):
         print("-"*34)
         print(f"Discord server:\t{self.bot.guild.name if self.bot.guild is not None else 'Not set'}")
         print(f"Prefix:\t\t{self.bot.prefix}")
-        print(f"Servers:\t{len(self.bot.servers.keys())}")
+        print(f"Servers:\t{len(self.bot.servers)}")
         print(f"Head admin:\t{self.bot.head_admin.name if self.bot.head_admin is not None else 'Not set'}")
         print(f"Admin:\t\t{self.bot.admin.name if self.bot.admin is not None else 'Not set'}")
         print(f"Moderator:\t{self.bot.moderator.name if self.bot.moderator is not None else 'Not set'}")

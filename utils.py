@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from math import floor
 
 
 # Prints formatted message to the console
@@ -24,3 +25,7 @@ def read_file(file_location:str) -> dict:
         exit(f"Could not find {file_location}. Make sure the file has the right name.")
 
     return data
+
+# Returns the current unix time
+def get_unix_time() -> int:
+    return floor((datetime.utcnow() - datetime(year=1970, month=1, day=1)).total_seconds())

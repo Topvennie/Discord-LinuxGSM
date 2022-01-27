@@ -1,5 +1,5 @@
 from command import Command
-from typing import List
+from typing import List, Tuple
 
 # Class for the different servers
 class Server():
@@ -44,3 +44,6 @@ class Server():
     @property
     def moderator(self) -> List[Command]:
         return self.moderator_commands
+
+    def execute_command(self, command_name:str) -> Tuple[bool, str, str]:
+        pass

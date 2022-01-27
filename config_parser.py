@@ -20,7 +20,7 @@ server_commands_requires_values = ["name", "user", "command"]
 
 forbidden_server_names = ["restart", "reload", "refresh", "settings", "setting", "setprefix", "set_prefix", "setactivity", "set_activity", "set_activity_type", "set_activity_text", "set_activitytype", "set_activitytext", "setactivitytype", 
                         "setactivitytext", "setheadadmin", "set_head_admin", "set_headadmin", "setadmin", "set_admin", "setmoderator", "set_moderator", "setembedcolour", "set_embed_colour", "set_embed_color", "set_embedcolour", "set_embedcolor", 
-                        "setembedcolor", "set_colour", "set_color", "setcolour", "setcolor"]
+                        "setembedcolor", "set_colour", "set_color", "setcolour", "setcolor", "servers"]
 
 
 ###########
@@ -205,6 +205,11 @@ def parse_servers(template_commands:dict) -> List[Server]:
         server_name = data[server_name]["name"]
         server_user = data[server_name]["user"]
         server_path = data[server_name]["path"]
+
+        # Check for forbidden server names
+        if server_name in forbidden_server_names:
+            print_to_console(f"'{server_name}' will not be added as it's name is the same as one of the built in commands.")
+            return
 
         # Basic checks for the file
         if not os.path.exists(server_path):
