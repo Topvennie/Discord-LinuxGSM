@@ -44,14 +44,14 @@ def set_bot_variables(settings_data:dict, servers_data:dict) -> None:
     bot.servers = servers_data
 
 # Send embeds
-async def send(channel:discord.TextChannel, description:str, title:str="") -> Optional[discord.Message]:
+async def send(channel:discord.TextChannel, description:str, title:str="", delete_after:int=None) -> Optional[discord.Message]:
     embed = discord.Embed(
         title=title,
         description=description,
         colour=bot.embed_colour
     )
     try:
-        msg = await channel.send(embed=embed)
+        msg = await channel.send(embed=embed, delete_after=delete_after)
     except discord.errors.Forbidden:
         info = await bot.application_info()
         owner = info.owner
@@ -87,10 +87,15 @@ print_to_console("4/5 Making the bot...")
 bot = make_bot(settings_data, servers_data)
 
 
-##################
-#  Bot Commands  #
-##################
+##############################
+#  Bot Commands / Listeners  #
+##############################
 
+
+# Global guild check
+@bot.check
+async def right_guild(ctx) -> bool:
+    return ctx.guild.id == bot.guild
 
 # Reloads both cogs
 @bot.command(name="restart", aliases=["reload"])
@@ -135,10 +140,10 @@ async def _refresh(ctx) -> None:
     
     await msg.edit(embed=discord.Embed(description="Refreshed servers", color=bot.color))
 
-# Global guild check
-@bot.check
-async def right_guild(ctx):
-    return ctx.guild.id == bot.guild
+# Ignore all errors
+@bot.event
+async def on_command_error(ctx, error) -> None:
+    print_to_console(f"An error just occurred: {error}")
 
 
 #############

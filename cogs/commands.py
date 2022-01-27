@@ -180,11 +180,19 @@ class Commands(commands.Cog):
 
         await reaction.message.edit(embed=embed)
 
-        result = server_object.execute(command)
+        result = await server_object.execute(command, self.bot, reaction.message.channel, member)
 
         if result[0]:
             description = f"""{member.mention} used `{command}`\n
                         ✅ Succesfully executed the command"""
+        elif result[3]:
+            description = f"""{member.mention} used `{command}`\n
+                        ❌ Failed to execute the command
+                        {command} requires input"""
+        elif not result[0] and result[1] is None and result[2] is None:
+            description = f"""{member.mention} used `{command}`\n
+                        ❌ Could not find the command
+                        Please try refreshing your serverlist with `{self.bot.prefix}refresh`"""
         else:
             description = f"""{member.mention} used `{command}`\n
                         ❌ Failed to execute the command"""
@@ -201,7 +209,7 @@ class Commands(commands.Cog):
 
         await reaction.message.edit(embed=embed)
 
-        if result[1] != "":
+        if result[1] is not None:
             if len(result[1]) < 3800:
                 await self.send_message(reaction.message.channel, f"Output:\n```bash\n{result[1]}```", delete_after=300)
             else:
@@ -210,7 +218,7 @@ class Commands(commands.Cog):
                 if file:
                     await self.send_file(reaction.message.channel, file_location, "Output", delete_after=300)
                     self.delete_file(file_location)
-        if result[2] != "":
+        if result[2] is not None:
             if len(result[2]) < 3800:
                 await self.send_message(reaction.message.channel, f"Errors:\n```bash\n{result[2]}```", delete_after=300)
             else:
