@@ -5,9 +5,8 @@ from discord.ext.commands import Bot
 
 # Class for the different servers
 class Server():
-    def __init__(self, name:str, user:str, path:str) -> None:
+    def __init__(self, name:str, path:str) -> None:
         self.name = name
-        self.user = user
         self.path = path
         self.head_admin_commands = []
         self.admin_commands = []

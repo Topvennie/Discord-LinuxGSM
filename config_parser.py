@@ -14,7 +14,7 @@ from utils import exit, print_to_console, read_file
 
 
 settings_required_values = ["prefix", "token", "activity type", "activity text", "server", "head admin", "admin", "moderator", "embed colour"]
-commands_required_values = ["server_command", "command", "require_path", "strip_user_input"]
+commands_required_values = ["server command", "command", "require path", "strip user input"]
 server_required_values = ["name", "user", "path", "head admin", "admin", "moderator", "commands"]
 server_commands_requires_values = ["name", "user", "command"]
 
@@ -166,19 +166,19 @@ def parse_commands() -> dict:
             continue
 
         # TODO Shorten 
-        server_command = check_bool(data[command]["server_command"])
+        server_command = check_bool(data[command]["server command"])
         if server_command[1]:
             print_to_console(f"'{command}' will not be added as the option 'server_command' is not a boolean.")
             continue
         server_command = server_command[1]
 
-        require_path = check_bool(data[command]["require_path"])
+        require_path = check_bool(data[command]["require path"])
         if require_path[1]:
             print_to_console(f"'{command}' will not be added as the option 'require_path' is not a boolean.")
             continue
         require_path = require_path[1]
 
-        strip_user_input = check_bool(data[command]["strip_user_input"])
+        strip_user_input = check_bool(data[command]["strip user input"])
         if strip_user_input[1]:
             print_to_console(f"'{command}' will not be added as the option 'strip_user_input' is not a boolean.")
             continue
@@ -203,7 +203,6 @@ def parse_servers(template_commands:dict) -> List[Server]:
             continue
 
         server_name = data[server_name]["name"]
-        server_user = data[server_name]["user"]
         server_path = data[server_name]["path"]
 
         # Check for forbidden server names
@@ -226,9 +225,9 @@ def parse_servers(template_commands:dict) -> List[Server]:
                 print_to_console(f"'{server_name}' will not be added as there's already another server with that name.")
                 continue
 
-        server = Server(server_name, server_user, server_path)
+        server = Server(server_name, server_path)
 
-        head_admin_commands = data[server_name]["head_admin"]
+        head_admin_commands = data[server_name]["head admin"]
         admin_commands = data[server_name]["admin"]
         moderator_commands = data[server_name]["moderator"]
 

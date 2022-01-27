@@ -1,38 +1,38 @@
 {
     "start" : {
-        "server_command" : true,
+        "server command" : true,
         "command" : "start",
-        "require_path" : false,
-        "strip_user_input" : false
+        "require path" : false,
+        "strip user input" : false
     },
     "stop" : {
-        "server_command" : true,
+        "server command" : true,
         "command" : "stop",
-        "require_path" : false,
-        "strip_user_input" : false
+        "require path" : false,
+        "strip user input" : false
     },
     "restart" : {
-        "server_command" : true,
+        "server command" : true,
         "command" : "restart",
-        "require_path" : false,
-        "strip_user_input" : false
+        "require path" : false,
+        "strip user input" : false
     },
     "postdetails" : {
-        "server_command" : true,
+        "server command" : true,
         "commands" : "postdetails",
-        "require_path" : false,
-        "strip_user_input" : false
+        "require path" : false,
+        "strip user input" : false
     },
     "delete" : {
-        "server_command" : false,
+        "server command" : false,
         "command" : "rm {}",
-        "require_path" : true,
-        "strip_user_input" : true
+        "require path" : true,
+        "strip user input" : true
     },
     "list_files" : {
-        "server_commands" : false,
+        "server commands" : false,
         "command" : "ls {}",
-        "require_path" : true,
-        "strip_user_input" : true
+        "require path" : true,
+        "strip user input" : true
     }
 }

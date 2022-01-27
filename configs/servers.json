@@ -1,9 +1,8 @@
 {
     "" : {
         "name" : "",
-        "user" : "",
         "path" : "",
-        "head_admin" : [],
+        "head admin" : [],
         "admin" : [],
         "moderator" : [],
         "commands ": {

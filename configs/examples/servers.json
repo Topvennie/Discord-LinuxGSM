@@ -1,9 +1,8 @@
 {
     "arena" : {
         "name" : "Arena",
-        "user" : "arena",
         "path" : "/home/arena/csgoserver",
-        "head_admin" : [],
+        "head admin" : [],
         "admin" : ["start", "stop"],
         "moderator" : [],
         "commands ": {
@@ -21,9 +20,8 @@
     },
     "bhop" : {
         "name" : "Bunny Hop",
-        "user" : "bhop",
         "path" : "/home/bhop/csgoserver",
-        "head_admin" : ["delete_map", "delete_config_file"],
+        "head admin" : ["delete_map", "delete_config_file"],
         "admin" : ["start", "stop"],
         "moderator" : [],
         "commands ": {
@@ -58,9 +56,8 @@
     },
     "retakes" : {
         "name" : "Retakes",
-        "user" : "retakes",
         "path" : "/home/retakes/csgoserver",
-        "head_admin" : ["delete_retake_file"],
+        "head admin" : ["delete_retake_file"],
         "admin" : ["stop", "postdetails"],
         "moderator" : ["start"],
         "commands ": {
