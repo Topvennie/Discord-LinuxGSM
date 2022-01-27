@@ -1,12 +1,14 @@
+import asyncio
+import os
+from datetime import datetime
+from typing import Optional
+
 import discord
 from discord.ext import commands
-from typing import Optional
-import asyncio
-from ..utils import get_unix_time
-from ..server import Server
+
 from ..discordLinuxGSM import send
-from datetime import datetime
-import os
+from ..server import Server
+from ..utils import get_unix_time
 
 
 # Class for all the server commands

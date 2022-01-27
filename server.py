@@ -1,7 +1,10 @@
-from command import Command
-from typing import List, Tuple, Optional
-from discord import TextChannel, Member
+from typing import List, Optional, Tuple
+
+from discord import Member, TextChannel
 from discord.ext.commands import Bot
+
+from command import Command
+
 
 # Class for the different servers
 class Server():

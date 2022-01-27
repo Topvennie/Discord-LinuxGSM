@@ -1,12 +1,9 @@
 import subprocess
 from asyncio import TimeoutError
-from sqlite3 import Time
 from typing import List, Optional, Tuple
 
 import discord
 from discord.ext import commands
-
-from discordLinuxGSM import send
 
 
 # Class for commands
@@ -39,12 +36,33 @@ class Command():
 
         return True, msg
 
+    # Send embeds. Can't use one in discordLinusGSM.py because of circular import
+    async def send(bot:commands.Bot, channel:discord.TextChannel, description:str, title:str="", delete_after:int=None) -> Optional[discord.Message]:
+        embed = discord.Embed(
+            title=title,
+            description=description,
+            colour=bot.embed_colour
+        )
+        try:
+            msg = await channel.send(embed=embed, delete_after=delete_after)
+        except discord.errors.Forbidden:
+            info = await bot.application_info()
+            owner = info.owner
+            try:
+                await owner.send(f"""I am unable to send embeds in {channel.name}.
+                                    Without the proper permissions I'm unable to function properly!""")
+            except discord.errors.Forbidden:
+                pass
+            return None
+
+        return msg
+
     # Ask for arguments to the user
     async def ask_for_input(self, bot:commands.Bot, channel:discord.TextChannel, author:discord.Member) -> Tuple[bool, Optional[List[str]]]:
         def check(msg):
             return msg.author == author and msg.channel == channel
 
-        await send(channel, f'`{self.name}` requires {self.command.count("{}")} argument(s)\nPlease give them seperated with a space\nIf one of the arguments includes a space then enclose it in __double__ quotes (" ") ', delete_after=60)
+        await send(bot, channel, f'`{self.name}` requires {self.command.count("{}")} argument(s)\nPlease give them seperated with a space\nIf one of the arguments includes a space then enclose it in __double__ quotes (" ") ', delete_after=60)
         try:
             msg = await bot.wait_for("message", check=check, timeout=60)
         except TimeoutError:

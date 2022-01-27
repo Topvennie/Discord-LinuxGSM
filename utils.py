@@ -1,5 +1,5 @@
-from datetime import datetime
 import json
+from datetime import datetime
 from math import floor
 
 
@@ -11,7 +11,7 @@ def print_to_console(message:str) -> None:
 # Terminates the process
 def exit(message:str) -> None:
     print_to_console(message)
-    print_to_console("Fatal Error, Bot Terminated.\nLook at the github page https://github.com/Topvennie/Discord-LinuxGSM if you need help.")
+    print_to_console("Fatal Error, Bot Terminated.\nLook at the github page https://github.com/Topvennie/Discord-LinuxGSM/wiki if you need help.")
     raise SystemExit(1)
 
 
