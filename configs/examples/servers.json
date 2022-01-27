@@ -1,0 +1,90 @@
+{
+    "arena" : {
+        "name" : "Arena",
+        "user" : "arena",
+        "path" : "/home/arena/csgoserver",
+        "head_admin" : [],
+        "admin" : ["start", "stop"],
+        "moderator" : [],
+        "commands ": {
+            "start" : {
+                "name" : "Start Server",
+                "user" : "arena",
+                "command" : "restart"
+            },
+            "stop" : {
+                "name" : "Stop Server",
+                "user" : "arena",
+                "command" : "stop"
+            }
+        }
+    },
+    "bhop" : {
+        "name" : "Bunny Hop",
+        "user" : "bhop",
+        "path" : "/home/bhop/csgoserver",
+        "head_admin" : ["delete_map", "delete_config_file"],
+        "admin" : ["start", "stop"],
+        "moderator" : [],
+        "commands ": {
+            "start" : {
+                "name" : "Start Server",
+                "user" : "bhop",
+                "command" : "restart"
+            },
+            "stop" : {
+                "name" : "Stop Server",
+                "user" : "bhop",
+                "command" : "stop"
+            },
+            "delete_map" : {
+                "name" : "Delete Map File",
+                "user" : "bhop",
+                "command" : "delete",
+                "path" : "./serverfiles/csgo/maps/"
+            },
+            "delete_config_file" : {
+                "name" : "Delete Config File",
+                "user" : "bhop",
+                "command" : "delete",
+                "path" : "./serverfiles/csgo/addons/sourcemod/configs/"
+            },
+            "change_map" : {
+                "name" : "Change Server Map",
+                "user" : "bhop",
+                "command" : "change_map"
+            }
+        }
+    },
+    "retakes" : {
+        "name" : "Retakes",
+        "user" : "retakes",
+        "path" : "/home/retakes/csgoserver",
+        "head_admin" : ["delete_retake_file"],
+        "admin" : ["stop", "postdetails"],
+        "moderator" : ["start"],
+        "commands ": {
+            "start" : {
+                "name" : "Start Server",
+                "user" : "retakes",
+                "command" : "restart"
+            },
+            "stop" : {
+                "name" : "Stop Server",
+                "user" : "retakes",
+                "command" : "stop"
+            },
+            "postdetails" : {
+                "name" : "See Server Details",
+                "user" : "retakes",
+                "command" : "postdetails"
+            },
+            "delete_retake_file" : {
+                "name" : "Delete Retake Config File",
+                "user" : "retakes",
+                "command" : "delete",
+                "path" : "./serverfiles/csgo/addons/sourcemod/configs/retakes/"
+            }
+        }
+    }
+}
