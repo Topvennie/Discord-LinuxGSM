@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from ..discordLinuxGSM import send
-from ..utils import exit, print_to_console
+from ..utils import print_to_console
 
 
 # Class for all the settings
@@ -28,14 +28,12 @@ class Settings(commands.Cog):
             self.bot.guild = None
 
         if self.bot.guild is None:
-            exit("A valid server id is required.")
+            print_to_console(f"""use the invite link to invite me to the server specified in settings.json
+                            After which use the command `{self.bot.prefix}restart` to restart the bot""")
             
         self.bot.head_admin = self.bot.guild.get_role(self.bot.head_admin)
         self.bot.admin = self.bot.guild.get_role(self.bot.admin)
         self.bot.moderator = self.bot.guild.get_role(self.bot.moderator)
-
-        if self.bot.head_admin is None and self.bot.admin is None and self.bot.moderator is None:
-            exit("You need at least one valid staff role.")
 
     # Cog check 
     def cog_check(self, ctx:commands.Context) -> bool:        
