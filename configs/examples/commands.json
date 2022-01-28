@@ -19,7 +19,7 @@
     },
     "postdetails" : {
         "server command" : true,
-        "commands" : "postdetails",
+        "command" : "postdetails",
         "require path" : false,
         "strip user input" : false
     },

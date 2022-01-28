@@ -19,7 +19,7 @@
     },
     "postdetails" : {
         "server command" : true,
-        "commands" : "postdetails",
+        "command" : "postdetails",
         "require path" : false,
         "strip user input" : false
     },
@@ -30,7 +30,7 @@
         "strip user input" : true
     },
     "list_files" : {
-        "server commands" : false,
+        "server command" : false,
         "command" : "ls {}",
         "require path" : true,
         "strip user input" : true
