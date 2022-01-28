@@ -15,7 +15,7 @@ from utils import exit, print_to_console, read_file
 
 settings_required_values = ["prefix", "token", "activity type", "activity text", "server", "head admin", "admin", "moderator", "embed colour"]
 commands_required_values = ["server command", "command", "require path", "strip user input"]
-server_required_values = ["name", "user", "path", "head admin", "admin", "moderator", "commands"]
+server_required_values = ["name", "path", "head admin", "admin", "moderator", "commands"]
 server_commands_requires_values = ["name", "user", "command"]
 
 forbidden_server_names = ["restart", "reload", "refresh", "settings", "setting", "setprefix", "set_prefix", "setactivity", "set_activity", "set_activity_type", "set_activity_text", "set_activitytype", "set_activitytext", "setactivitytype", 

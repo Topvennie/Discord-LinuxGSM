@@ -8,7 +8,8 @@
         "commands ": {
             "" : {
                 "name" : "",
-                "user" : ""
+                "user" : "",
+                "command" : ""
             }
         }
     }
