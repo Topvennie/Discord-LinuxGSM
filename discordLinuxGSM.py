@@ -1,5 +1,3 @@
-from typing import Optional
-
 import discord
 from discord.ext import commands
 
@@ -17,7 +15,7 @@ def get_prefix(bot:commands.Bot, message:discord.Message) -> str:
     return bot.prefix
 
 # Make bot
-def make_bot(bot:commands.Bot, settings_data:dict, servers_data:dict) -> commands.Bot:
+def make_bot(bot:commands.Bot, settings_data:dict, servers_data:dict) -> None:
     set_bot_variables(bot, settings_data, servers_data)
 
     bot.remove_command("help")
@@ -95,10 +93,10 @@ async def _restart(ctx) -> None:
         bot.load_extension("cogs.settings")
         bot.load_extension("cogs.commands")
     except commands.ExtensionFailed as error:
-        await msg.edit(embed=discord.Embed(description="Failed to reload the bot\nPlease look at the console to see what went wrong", color=bot.color))
+        await msg.edit(embed=discord.Embed(description="Failed to reload the bot\nPlease look at the console to see what went wrong", color=bot.embed_colour))
         exit(f"Failed to reload '{error.name}' because '{error.original}'")
 
-    await msg.edit(embed=discord.Embed(description="Reloaded bot", color=bot.color))
+    await msg.edit(embed=discord.Embed(description="Reloaded bot", color=bot.embed_colour))
 
 # Refreshes the server list
 @bot.command(name="refresh")
@@ -113,12 +111,12 @@ async def _refresh(ctx) -> None:
     bot.servers = servers_data
 
     try:
-        bot.load_extension("./cogs/commands")
+        bot.load_extension("cogs.commands")
     except commands.ExtensionFailed as error:
-        await msg.edit(embed=discord.Embed(description="Failed to refresh the servers\nPlease look at the console to get more information", color=bot.color))
+        await msg.edit(embed=discord.Embed(description="Failed to refresh the servers\nPlease look at the console to get more information", color=bot.embed_colour))
         exit(f"Failed to refresh the servers because '{error.original}'")
     
-    await msg.edit(embed=discord.Embed(description="Refreshed servers", color=bot.color))
+    await msg.edit(embed=discord.Embed(description=f"Refreshed `{len(servers_data)}` server(s)", color=bot.embed_colour))
 
 # Ignore all errors
 @bot.event

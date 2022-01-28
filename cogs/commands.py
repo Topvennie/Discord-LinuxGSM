@@ -291,8 +291,6 @@ class Commands(commands.Cog):
         if message.content.replace(self.bot.prefix, "") in self.servers.keys():
             message.content = message.content.replace(self.bot.prefix, "")
             await self.process_command(message, self.servers[message.content])
-        else :
-            await self.bot.process_commands(message)
 
     # Deletes the message data if the message gets deleted
     @commands.Cog.listener()

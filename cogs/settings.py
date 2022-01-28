@@ -68,7 +68,7 @@ class Settings(commands.Cog):
     # Gives overview of all the settings
     @commands.command(name="settings", aliases=["setting"])
     async def _settings(self, ctx:commands.Context) -> None:
-        await self.send(self.bot, ctx, f"""`Prefix:` {self.bot.prefix}
+        await send(self.bot, ctx, f"""`Prefix:` {self.bot.prefix}
                                 `Discord Server:` {self.bot.guild.name}
                                 `Servers:` {len(self.bot.servers)}
                                 `Head admin:` {self.bot.head_admin.mention if self.bot.head_admin is not None else 'Not set'}
@@ -79,11 +79,11 @@ class Settings(commands.Cog):
     @commands.command(name="setprefix", aliases=["set_prefix"])
     async def _setprefix(self, ctx:commands.Context, new_prefix:str=None) -> None:
         if new_prefix is None:
-            await self.send(self.bot, ctx, "You forgot to specify the new prefix")
+            await send(self.bot, ctx, "You forgot to specify the new prefix")
             return
 
         if new_prefix == self.bot.prefix:
-            await self.send(self.bot, ctx, f"`{new_prefix}` is already your prefix")
+            await send(self.bot, ctx, f"`{new_prefix}` is already your prefix")
             return
 
         changed_setting = await self.change_settings(ctx, "prefix", new_prefix)
@@ -91,7 +91,7 @@ class Settings(commands.Cog):
         if changed_setting:
             old_prefix = self.bot.prefix
             self.bot.prefix = new_prefix
-            await self.send(self.bot, ctx.channel, f"""Prefix changed
+            await send(self.bot, ctx.channel, f"""Prefix changed
                                     {old_prefix} `->` {self.bot.prefix}""")
 
     #Sets a new activity
@@ -103,7 +103,7 @@ class Settings(commands.Cog):
                             activity text can be anything you want"""
 
         if activity_type is None or activity_text is None:
-            await self.send(self.bot, ctx, error_message)
+            await send(self.bot, ctx, error_message)
             return
 
         if activity_type == "playing":
@@ -119,28 +119,28 @@ class Settings(commands.Cog):
             changed_text = await self.change_settings(ctx, "activity text", activity_text)
             activity = discord.Activity(type=discord.ActivityType.listening, name=activity_text)
         else:
-            await self.send(self.bot, ctx.channel, error_message)
+            await send(self.bot, ctx.channel, error_message)
             return
 
         if changed_type and changed_text:
             async with ctx.typing():
                 await self.bot.change_presence(activity=activity)
-            await self.send(self.bot, ctx.channel, "Presence changed")
+            await send(self.bot, ctx.channel, "Presence changed")
 
     # Sets a new head admin role
     @commands.command(name="setheadadmin", aliases=["set_head_admin", "set_headadmin"])
     async def _setheadadmin(self, ctx:commands.Context, role:discord.Role=None) -> None:
         if role is None:
-            await self.send(self.bot, ctx.channel, """You forgot to specify the new head admin role
+            await send(self.bot, ctx.channel, """You forgot to specify the new head admin role
                                             Specify a new role by either pinging the role or by using it's id or name""")
             return
 
         if role == self.bot.head_admin:
-            await self.send(self.bot, ctx.channel, f"{role.mention} is already the head admin role")
+            await send(self.bot, ctx.channel, f"{role.mention} is already the head admin role")
             return
 
         if role == self.bot.admin or role == self.bot.moderator:
-            await self.send(self.bot, ctx.channel, f"""Every staff role has to be unique.
+            await send(self.bot, ctx.channel, f"""Every staff role has to be unique.
                                     Head admins will also have access to the commands for admins and moderators""")
             return
 
@@ -149,25 +149,25 @@ class Settings(commands.Cog):
             old_role = self.bot.head_admin
             self.bot.head_admin = role
             if old_role is None:
-                await self.send(self.bot, ctx, f"Head admin role set to {self.bot.head_admin.mention}")
+                await send(self.bot, ctx, f"Head admin role set to {self.bot.head_admin.mention}")
             else:
-                await self.send(self.bot, ctx, f"""Head admin role changed
+                await send(self.bot, ctx, f"""Head admin role changed
                                                 {old_role.mention} `->` {self.bot.head_admin.mention}""")
 
     # Sets a new admin role
     @commands.command(name="setadmin", aliases=["set_admin"])
     async def _setadmin(self, ctx:commands.Context, role:discord.Role=None) -> None:
         if role is None:
-            await self.send(self.bot, ctx.channel, """You forgot to specify the new admin role
+            await send(self.bot, ctx.channel, """You forgot to specify the new admin role
                                             Specify a new role by either pinging the role or by using it's id or name""")
             return
 
         if role == self.bot.admin:
-            await self.send(self.bot, ctx.channel, f"{role.mention} is already the admin role")
+            await send(self.bot, ctx.channel, f"{role.mention} is already the admin role")
             return
 
         if role == self.bot.head_admin or role == self.bot.moderator:
-            await self.send(self.bot, ctx.channel, f"""Every staff role has to be unique.
+            await send(self.bot, ctx.channel, f"""Every staff role has to be unique.
                                     Admin will have access to the commands for moderators but to the commands for head admins""")
             return
 
@@ -176,25 +176,25 @@ class Settings(commands.Cog):
             old_role = self.bot.admin
             self.bot.admin = role
             if old_role is None:
-                await self.send(self.bot, ctx.channel, f"Admin role set to {self.bot.admin.mention}")
+                await send(self.bot, ctx.channel, f"Admin role set to {self.bot.admin.mention}")
             else:
-                await self.send(self.bot, ctx.channel, f"""Admin role changed
+                await send(self.bot, ctx.channel, f"""Admin role changed
                                                 {old_role.mention} `->` {self.bot.admin.mention}""")
 
     # Sets a new moderator role
     @commands.command(name="setmoderator", aliases=["set_moderator"])
     async def _setmoderator(self, ctx:commands.Context, role:discord.Role=None) -> None:
         if role is None:
-            await self.send(self.bot, ctx.channel, """You forgot to specify the new moderator role
+            await send(self.bot, ctx.channel, """You forgot to specify the new moderator role
                                             Specify a new role by either pinging the role or by using it's id or name""")
             return
 
         if role == self.bot.head_admin:
-            await self.send(self.bot, ctx.channel, f"{role.mention} is already the moderator role")
+            await send(self.bot, ctx.channel, f"{role.mention} is already the moderator role")
             return
 
         if role == self.bot.head_admin or role == self.bot.admin:
-            await self.send(self.bot, ctx.channel, f"""Every staff role has to be unique.
+            await send(self.bot, ctx.channel, f"""Every staff role has to be unique.
                                     Moderators will only have access to the commands for moderators""")
             return
 
@@ -203,22 +203,22 @@ class Settings(commands.Cog):
             old_role = self.bot.moderator
             self.bot.moderator = role
             if old_role is None:
-                await self.send(self.bot, ctx.channel, f"Moderator role set to {self.bot.moderator.mention}")
+                await send(self.bot, ctx.channel, f"Moderator role set to {self.bot.moderator.mention}")
             else:
-                await self.send(self.bot, ctx.channel, f"""Moderator role changed
+                await send(self.bot, ctx.channel, f"""Moderator role changed
                                                 {old_role.mention} `->` {self.bot.moderator.mention}""")
 
     # Sets the embed colour
     @commands.command(name="setembedcolour", aliases=["set_embed_colour", "set_embed_color", "set_embedcolour", "set_embedcolor", "setembedcolor", "set_colour", "set_color", "setcolour", "setcolor"])
     async def _setembedcolour(self, ctx:commands.Context, r:int=None, g:int=None, b:int=None):
         if r is None or g is None or b is None:
-            await self.send(self.bot, ctx.channel, f"""You can change the embed colour by changing it's rgb values.
+            await send(self.bot, ctx.channel, f"""You can change the embed colour by changing it's rgb values.
                                     Seperate each value by a space.
                                     e.g. White would become `{self.bot.prefix}setembedcolour 255 255 255`""")
             return
 
         if not 0 <= r <= 255 or not 0 <= g <= 255 or not 0 <= b <= 255:
-            await self.send(self.bot, ctx.channel, "A rgb value is between 0 and 255")
+            await send(self.bot, ctx.channel, "A rgb value is between 0 and 255")
             return
 
         changed_setting = await self.change_settings(ctx, "embed colour", [r, g, b])
@@ -226,7 +226,7 @@ class Settings(commands.Cog):
             colour = discord.Color.from_rgb(r, g, b)
             self.bot.embed_colour = colour
 
-            await self.send(self.bot, ctx.channel, "successfully changed the embed colour")
+            await send(self.bot, ctx.channel, "successfully changed the embed colour")
 
 
     ###############
@@ -239,7 +239,7 @@ class Settings(commands.Cog):
     async def on_ready(self) -> None:
         await self.startup_check()
 
-        print_to_console("\n\tBot started!")
+        print("\n\tBot started!")
         print("-"*34)
         print(f"Bot name:\t{self.bot.user.name}")
         print(f"Bot ID:\t\t{self.bot.user.id}")

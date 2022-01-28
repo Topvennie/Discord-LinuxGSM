@@ -35,12 +35,13 @@ def get_unix_time() -> int:
     return floor((datetime.utcnow() - datetime(year=1970, month=1, day=1)).total_seconds())
 
 # Send embeds
-async def send(bot:commands.Bot, channel:discord.TextChannel, description:str, title:str="", delete_after:int=None) -> Optional[discord.Message]:
+async def send(bot:commands.Bot, channel:discord.TextChannel, description:str, title:str="", footer:str="", delete_after:int=None) -> Optional[discord.Message]:
     embed = discord.Embed(
         title=title,
         description=description,
         colour=bot.embed_colour
     )
+    embed.set_footer(text=footer)
     try:
         msg = await channel.send(embed=embed, delete_after=delete_after)
     except discord.errors.Forbidden:
@@ -51,6 +52,6 @@ async def send(bot:commands.Bot, channel:discord.TextChannel, description:str, t
                                 Without the proper permissions I'm unable to function properly!""")
         except discord.errors.Forbidden:
             pass
-        return None
+        return
 
     return msg
