@@ -71,7 +71,7 @@ def check_bool(data:Union[str, int, bool]) -> Tuple[bool, Optional[bool]]:
 
         if data == 0:
             return True, False
-
+    print(type(data))
     return False, None
 
 
@@ -112,7 +112,7 @@ def parse_settings() -> Tuple[str, str, Activity, int, int, int, int, Color]:
         else:
             exit("Invalid activity type! Can only be 'playing', 'watching' or 'listening'. To disable leave empty.")
     elif activity_type != "" and activity_text == "":
-        exit("'activity_text' is required when specifying an activity_type. To disable leave both empty.")
+        exit("'activity_text' is required when specifying an activity type. To disable leave both empty.")
 
     # Optional server or role restrictions
     guild = check_id_exists(data["server"])
@@ -167,20 +167,20 @@ def parse_commands() -> dict:
 
         # TODO Shorten 
         server_command = check_bool(data[command]["server command"])
-        if server_command[0]:
-            print_to_console(f"'{command}' will not be added as the option 'server_command' is not a boolean.")
+        if not server_command[0]:
+            print_to_console(f"'{command}' will not be added as the option 'server command' is not a boolean.")
             continue
         server_command = server_command[1]
 
         require_path = check_bool(data[command]["require path"])
-        if require_path[0]:
-            print_to_console(f"'{command}' will not be added as the option 'require_path' is not a boolean.")
+        if not require_path[0]:
+            print_to_console(f"'{command}' will not be added as the option 'require path' is not a boolean.")
             continue
         require_path = require_path[1]
 
         strip_user_input = check_bool(data[command]["strip user input"])
-        if strip_user_input[0]:
-            print_to_console(f"'{command}' will not be added as the option 'strip_user_input' is not a boolean.")
+        if not strip_user_input[0]:
+            print_to_console(f"'{command}' will not be added as the option 'strip user input' is not a boolean.")
             continue
         strip_user_input = strip_user_input[1]
 
