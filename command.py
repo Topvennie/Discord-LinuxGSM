@@ -5,6 +5,8 @@ from typing import List, Optional, Tuple
 import discord
 from discord.ext import commands
 
+from utils import send
+
 
 # Class for commands
 class Command():
@@ -35,27 +37,6 @@ class Command():
             return False
 
         return True, msg
-
-    # Send embeds. Can't use one in discordLinusGSM.py because of circular import
-    async def send(bot:commands.Bot, channel:discord.TextChannel, description:str, title:str="", delete_after:int=None) -> Optional[discord.Message]:
-        embed = discord.Embed(
-            title=title,
-            description=description,
-            colour=bot.embed_colour
-        )
-        try:
-            msg = await channel.send(embed=embed, delete_after=delete_after)
-        except discord.errors.Forbidden:
-            info = await bot.application_info()
-            owner = info.owner
-            try:
-                await owner.send(f"""I am unable to send embeds in {channel.name}.
-                                    Without the proper permissions I'm unable to function properly!""")
-            except discord.errors.Forbidden:
-                pass
-            return None
-
-        return msg
 
     # Ask for arguments to the user
     async def ask_for_input(self, bot:commands.Bot, channel:discord.TextChannel, author:discord.Member) -> Tuple[bool, Optional[List[str]]]:

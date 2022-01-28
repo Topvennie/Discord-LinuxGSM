@@ -195,15 +195,15 @@ def parse_servers(template_commands:dict) -> List[Server]:
     data = read_file("./configs/servers.json")
     all_servers = []
 
-    for server_name in data:
+    for server_keyname in data:
         # Check for required values
-        check_values = check_required_values(server_required_values, data[server_name])
+        check_values = check_required_values(server_required_values, data[server_keyname])
         if not check_values[0]:
             print_to_console(f"'{server_name}' will not be added as it does not have '{check_values[1]}'.")
             continue
 
-        server_name = data[server_name]["name"]
-        server_path = data[server_name]["path"]
+        server_name = data[server_keyname]["name"]
+        server_path = data[server_keyname]["path"]
 
         # Check for forbidden server names
         if server_name in forbidden_server_names:
@@ -227,33 +227,33 @@ def parse_servers(template_commands:dict) -> List[Server]:
 
         server = Server(server_name, server_path)
 
-        head_admin_commands = data[server_name]["head admin"]
-        admin_commands = data[server_name]["admin"]
-        moderator_commands = data[server_name]["moderator"]
+        head_admin_commands = data[server_keyname]["head admin"]
+        admin_commands = data[server_keyname]["admin"]
+        moderator_commands = data[server_keyname]["moderator"]
 
         has_commands = False
-        for command_data in data[server_name]["commands"]:
-            check_values = check_required_values(server_commands_requires_values, data[server_name]["commands"][command_data])
+        for command_data in data[server_keyname]["commands"]:
+            check_values = check_required_values(server_commands_requires_values, data[server_keyname]["commands"][command_data])
             if not check_values[0]:
                 print_to_console(f"'{command_data}' will not be added to '{server_name}' as it does not have '{check_values[1]}'")
                 continue
 
-            if data[server_name]["commands"][command_data]["command"] not in template_commands:
+            if data[server_keyname]["commands"][command_data]["command"] not in template_commands:
                 print_to_console(f"'{command_data}' will not be added to '{server_name}' as the command is not in commands.json")
                 continue
 
-            command_name = data[server_name]["commands"][command_data]["name"]
-            command_user = data[server_name]["commands"][command_data]["user"]
+            command_name = data[server_keyname]["commands"][command_data]["name"]
+            command_user = data[server_keyname]["commands"][command_data]["user"]
 
             if template_commands[command_data][2]:
-                command_path = data[server_name]["commands"][command_data]["path"]
+                command_path = data[server_keyname]["commands"][command_data]["path"]
                 # Format path if it's a relative path
                 if command_path.startswith("./"):
                     command_path = server_path[:server_path.rfind("/")] + command_path[1:]
             else:
                 command_path = server_path
 
-            command = Command(command_name, data[server_name]["commands"][command_data]["command"], command_user, template_commands[command_data][1], command_path, template_commands[command_data][3])
+            command = Command(command_name, data[server_keyname]["commands"][command_data]["command"], command_user, template_commands[command_data][1], command_path, template_commands[command_data][3])
 
             if command_name in head_admin_commands:
                 server.add_head_admin_command(command)

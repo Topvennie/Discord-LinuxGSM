@@ -5,10 +5,8 @@ from typing import Optional
 
 import discord
 from discord.ext import commands
-
-from ..discordLinuxGSM import send
-from ..server import Server
-from ..utils import get_unix_time
+from server import Server
+from utils import get_unix_time, send
 
 
 # Class for all the server commands
@@ -110,7 +108,7 @@ class Commands(commands.Cog):
         # Limits to one concurrent menu / server
         for msg in self.messages:
             if msg.embeds[0].title == message.content:
-                await send(msg.channel, description=f"""There already is a menu open to execute a command for that server!
+                await send(self.bot, msg.channel, description=f"""There already is a menu open to execute a command for that server!
                                                             {msg.jump_url}""")
                 return
 
@@ -124,7 +122,7 @@ class Commands(commands.Cog):
         # Checks if the bot has the right permissions
         perms = message.channel.permissions_for(message.guild.me)
         if not perms.send_messages or not perms.manage_messages:
-            await send(message.channel, description=f"""I don't have the right permissions in {message.channel.mention}
+            await send(self.bot, message.channel, description=f"""I don't have the right permissions in {message.channel.mention}
                                                             I require the `manage messages` and `send messages` permissions to function properly""")
             return
 
@@ -135,7 +133,7 @@ class Commands(commands.Cog):
         for i in range(0, len(commands)):
             description += f"`{i + 1}.` {commands[i].name}\n"
 
-        msg = await send(message.channel, title=message.content, description=description)
+        msg = await send(self.bot, message.channel, description, title=message.content)
         for i in range(0, len(commands)):
             await msg.add_reaction(self.emoji[i])
 
@@ -266,11 +264,11 @@ class Commands(commands.Cog):
 
         if description == "" and len(self.bot.servers) == 0:
             if len(self.bot.servers) == 0:
-                await send(ctx.channel, description="There aren't any servers set up yet")
+                await send(self.bot, ctx.channel, description="There aren't any servers set up yet")
             else:
-                await send(ctx.channel, description="You don't have access to any of the current servers")
+                await send(self.bot, ctx.channel, description="You don't have access to any of the current servers")
         else:
-            await send(ctx.channel, description=description)
+            await send(self.bot, ctx.channel, description=description)
 
 
     ###############
@@ -290,7 +288,7 @@ class Commands(commands.Cog):
         if not message.content.startswith(self.bot.prefix):
             return
 
-        if message.contentreplace(self.bot.prefix, "") in self.servers.keys():
+        if message.content.replace(self.bot.prefix, "") in self.servers.keys():
             message.content = message.content.replace(self.bot.prefix, "")
             await self.process_command(message, self.servers[message.content])
         else :
