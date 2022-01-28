@@ -54,7 +54,7 @@ def check_id_exists(id:Union[str, int]) -> int:
     return int(id)
 
 # Checks if something can represent a bool
-def check_bool(data:Union[str, bool]) -> Tuple[bool, Optional[bool]]:
+def check_bool(data:Union[str, int, bool]) -> Tuple[bool, Optional[bool]]:
     if isinstance(data, bool):
         return True, data
 
@@ -95,7 +95,7 @@ def parse_settings() -> Tuple[str, str, Activity, int, int, int, int, Color]:
     activity_text = data["activity text"]
 
     if prefix == "":
-        prefix = "!!"
+        exit("You forgot to set a prefix.")
 
     token_split = token.split(".")
     if len(token) != 59 or len(token_split) != 3:
@@ -167,19 +167,19 @@ def parse_commands() -> dict:
 
         # TODO Shorten 
         server_command = check_bool(data[command]["server command"])
-        if server_command[1]:
+        if server_command[0]:
             print_to_console(f"'{command}' will not be added as the option 'server_command' is not a boolean.")
             continue
         server_command = server_command[1]
 
         require_path = check_bool(data[command]["require path"])
-        if require_path[1]:
+        if require_path[0]:
             print_to_console(f"'{command}' will not be added as the option 'require_path' is not a boolean.")
             continue
         require_path = require_path[1]
 
         strip_user_input = check_bool(data[command]["strip user input"])
-        if strip_user_input[1]:
+        if strip_user_input[0]:
             print_to_console(f"'{command}' will not be added as the option 'strip_user_input' is not a boolean.")
             continue
         strip_user_input = strip_user_input[1]
