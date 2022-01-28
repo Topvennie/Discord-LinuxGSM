@@ -3,7 +3,7 @@ from typing import List, Union
 
 import discord
 from discord.ext import commands
-from utils import print_to_console, send
+from utils import send
 
 
 # Class for all the settings
@@ -88,8 +88,9 @@ class Settings(commands.Cog):
                             activity text can be anything you want"""
 
         if activity_type is None or activity_text is None:
-            await send(self.bot, ctx, error_message)
-            return
+            if activity_type != "clear":
+                await send(self.bot, ctx, error_message, footer=f"To remove the activity use {self.bot.prefix}setactivity clear")
+                return
 
         if activity_type == "playing":
             changed_type = await self.change_settings(ctx, "activity type", activity_type)
@@ -103,8 +104,12 @@ class Settings(commands.Cog):
             changed_type = await self.change_settings(ctx, "activity type", activity_type)
             changed_text = await self.change_settings(ctx, "activity text", activity_text)
             activity = discord.Activity(type=discord.ActivityType.listening, name=activity_text)
+        elif activity_type == "clear":
+            changed_type = await self.change_settings(ctx, "activity type", "")
+            changed_text = await self.change_settings(ctx, "activity text", "")
+            activity = None
         else:
-            await send(self.bot, ctx.channel, error_message)
+            await send(self.bot, ctx.channel, error_message, footer=f"To remove the activity use {self.bot.prefix}setactivity clear")
             return
 
         if changed_type and changed_text:

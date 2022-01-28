@@ -140,6 +140,9 @@ async def on_command_error(ctx, error) -> None:
     if isinstance(error, commands.errors.CheckFailure):
         return
 
+    if isinstance(error, commands.errors.CommandNotFound):
+        return
+
     print_to_console(f"An error just occurred: {error}")
 
 # Triggers when the bot is ready and prints some basic information
