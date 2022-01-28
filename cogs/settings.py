@@ -18,21 +18,6 @@ class Settings(commands.Cog):
     ############
 
 
-    # Tries to convert the settings to objects
-    async def startup_check(self) -> None:
-        try:
-            self.bot.guild = await self.bot.fetch_guild(self.bot.guild)
-        except discord.errors.Forbidden:
-            self.bot.guild = None
-
-        if self.bot.guild is None:
-            print_to_console(f"""use the invite link to invite me to the server specified in settings.json
-                            After which use the command `{self.bot.prefix}restart` to restart the bot""")
-            
-        self.bot.head_admin = self.bot.guild.get_role(self.bot.head_admin)
-        self.bot.admin = self.bot.guild.get_role(self.bot.admin)
-        self.bot.moderator = self.bot.guild.get_role(self.bot.moderator)
-
     # Cog check 
     def cog_check(self, ctx:commands.Context) -> bool:        
         return ctx.guild == self.bot.guild and (self.bot.head_admin in ctx.author.roles or ctx.author.guild_permissions.administrator)
@@ -227,33 +212,6 @@ class Settings(commands.Cog):
             self.bot.embed_colour = colour
 
             await send(self.bot, ctx.channel, "successfully changed the embed colour")
-
-
-    ###############
-    #  Listeners  #
-    ###############
-
-
-    # Triggers when the bot is ready and prints some basic information
-    @commands.Cog.listener()
-    async def on_ready(self) -> None:
-        await self.startup_check()
-
-        print("\n\tBot started!")
-        print("-"*34)
-        print(f"Bot name:\t{self.bot.user.name}")
-        print(f"Bot ID:\t\t{self.bot.user.id}")
-        print(f"Invite link:\thttps://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=10304&scope=bot")
-        print("-"*34)
-        print(f"Discord server:\t{self.bot.guild.name if self.bot.guild is not None else 'Not set'}")
-        print(f"Prefix:\t\t{self.bot.prefix}")
-        print(f"Servers:\t{len(self.bot.servers)}")
-        print(f"Head admin:\t{self.bot.head_admin.name if self.bot.head_admin is not None else 'Not set'}")
-        print(f"Admin:\t\t{self.bot.admin.name if self.bot.admin is not None else 'Not set'}")
-        print(f"Moderator:\t{self.bot.moderator.name if self.bot.moderator is not None else 'Not set'}")
-        print("-"*34)
-        print("\n")
-        print_to_console("Bot is running")
 
 
 # Adds the cog to the bot
