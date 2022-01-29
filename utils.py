@@ -23,7 +23,10 @@ def exit(message:str) -> None:
 def read_file(file_location:str) -> dict:
     try:
         with open(file_location) as file:
-            data = json.load(file)
+            try:
+                data = json.load(file)
+            except json.decoder.JSONDecodeError:
+                exit(f"There's a json format error in {file_location}")
 
     except FileNotFoundError:
         exit(f"Could not find {file_location}. Make sure the file has the right name.")

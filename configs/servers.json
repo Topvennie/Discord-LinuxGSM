@@ -5,7 +5,7 @@
         "head admin" : [],
         "admin" : [],
         "moderator" : [],
-        "commands ": {
+        "commands": {
             "" : {
                 "name" : "",
                 "user" : "",
