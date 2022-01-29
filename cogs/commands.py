@@ -188,7 +188,7 @@ class Commands(commands.Cog):
         elif len(result) >= 4 and result[3]:
             description = f"""{member.mention} used `{command.name}`\n
                         ❌ Failed to execute the command
-                        {command} requires input"""
+                        {command.name} requires input"""
         elif not result[0] and result[1] is None and result[2] is None:
             description = f"""{member.mention} used `{command.name}`\n
                         ❌ Could not find the command

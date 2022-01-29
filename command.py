@@ -34,7 +34,7 @@ class Command():
             msg = msg[:-1]
 
         if "/"  in msg:
-            return False
+            return False, None
 
         return True, msg
 
@@ -47,7 +47,7 @@ class Command():
         try:
             msg = await bot.wait_for("message", check=check, timeout=60)
         except TimeoutError:
-            return False
+            return False, None
 
         arguments = []
 
@@ -61,7 +61,7 @@ class Command():
 
         [arguments.append(x) for x in msg.split(" ")]
         if len(arguments) != self.command.count("{}"):
-            return False
+            return False, None
 
         if self.strip:
             args = arguments.copy()
@@ -69,7 +69,7 @@ class Command():
             for arg in args:
                 result = self.strip_str(arg)
                 if not result[0]:
-                    return False
+                    return False, None
                 arguments.append(arg)
 
         return True, arguments
