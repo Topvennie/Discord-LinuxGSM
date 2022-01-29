@@ -9,12 +9,12 @@ from command import Command
 # Class for the different servers
 class Server():
     def __init__(self, name:str, path:str) -> None:
-        self.name = name
-        self.path = path
-        self.head_admin_commands = []
-        self.admin_commands = []
-        self.moderator_commands = []
-        self.all_commands = []
+        self.name : str = name
+        self.path : str = path
+        self.head_admin_commands : List[Command] = []
+        self.admin_commands : List[Command] = []
+        self.moderator_commands : List[Command] = []
+        self.all_commands : List[Command] = []
 
     # Makes sure each command is unique 
     def add_head_admin_command(self, command:Command) -> None:
@@ -54,10 +54,10 @@ class Server():
         return self.moderator_commands
 
     # Executes the commands
-    async def execute_command(self, command_name:str, bot:Bot, channel:TextChannel, author:Member) -> Tuple[bool, Optional[str], Optional[str], Optional[bool]]:
+    async def execute_command(self, bot:Bot, user_command:Command, channel:TextChannel, author:Member) -> Tuple[bool, Optional[str], Optional[str], Optional[bool]]:
         for command in self.all_commands:
-            if command.name == command_name:
-                result = await command.execute(channel)
+            if command == user_command:
+                result = await command.execute(bot, channel, author)
                 return result
 
         return False, None, None

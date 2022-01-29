@@ -1,22 +1,23 @@
 import asyncio
 import os
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, List, Tuple
 
 import discord
 from discord.ext import commands
 from server import Server
 from utils import get_unix_time, send
+from command import Command
 
 
 # Class for all the server commands
 class Commands(commands.Cog):
 
     def __init__(self, bot:commands.Bot) -> None:
-        self.bot = bot
-        self.servers = self.make_servers_variable()
-        self.messages = {}
-        self.emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+        self.bot : commands.Bot = bot
+        self.servers : Dict[str, Server] = self.make_servers_variable()
+        self.messages : Dict[discord.Message, Tuple[ReactionDeleter, Command]] = {}
+        self.emoji : List[str] = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
     # Makes the self.servers variable
     def make_servers_variable(self) -> dict:
@@ -108,8 +109,7 @@ class Commands(commands.Cog):
         # Limits to one concurrent menu / server
         for msg in self.messages:
             if msg.embeds[0].title == message.content:
-                await send(self.bot, msg.channel, description=f"""There already is a menu open to execute a command for that server!
-                                                            {msg.jump_url}""")
+                await send(self.bot, msg.channel, description=f"There already is a [menu]({msg.jump_url}) open to execute a command for that server!")
                 return
 
         if self.bot.head_admin in message.author.roles or message.author.guild_permissions.administrator:
@@ -165,10 +165,10 @@ class Commands(commands.Cog):
             if command in server_object.admin and self.bot.admin not in member.roles:
                 if self.bot.moderator not in member.roles:
                     return
-        
+
         # Construct embed
         self.messages[reaction.message][0].delete_now()
-        description = f"""{member.mention} used `{command}`\n\n
+        description = f"""{member.mention} used `{command.name}`\n\n
                         Executing the command..."""
         starttime = datetime.now()
         embed = discord.Embed(
@@ -180,21 +180,21 @@ class Commands(commands.Cog):
 
         await reaction.message.edit(embed=embed)
 
-        result = await server_object.execute(command, self.bot, reaction.message.channel, member)
+        result = await server_object.execute_command(self.bot, command, reaction.message.channel, member)
 
         if result[0]:
-            description = f"""{member.mention} used `{command}`\n
+            description = f"""{member.mention} used `{command.name}`\n
                         ✅ Succesfully executed the command"""
-        elif result[3]:
-            description = f"""{member.mention} used `{command}`\n
+        elif len(result) >= 4 and result[3]:
+            description = f"""{member.mention} used `{command.name}`\n
                         ❌ Failed to execute the command
                         {command} requires input"""
         elif not result[0] and result[1] is None and result[2] is None:
-            description = f"""{member.mention} used `{command}`\n
+            description = f"""{member.mention} used `{command.name}`\n
                         ❌ Could not find the command
                         Please try refreshing your serverlist with `{self.bot.prefix}refresh`"""
         else:
-            description = f"""{member.mention} used `{command}`\n
+            description = f"""{member.mention} used `{command.name}`\n
                         ❌ Failed to execute the command"""
 
         embed.description = description
@@ -209,7 +209,7 @@ class Commands(commands.Cog):
 
         await reaction.message.edit(embed=embed)
 
-        if result[1] is not None:
+        if result[1] is not None and result[1] != "":
             if len(result[1]) < 3800:
                 await self.send_message(reaction.message.channel, f"Output:\n```bash\n{result[1]}```", delete_after=300)
             else:
@@ -218,7 +218,7 @@ class Commands(commands.Cog):
                 if file:
                     await self.send_file(reaction.message.channel, file_location, "Output", delete_after=300)
                     self.delete_file(file_location)
-        if result[2] is not None:
+        if result[2] is not None and result[2] != "":
             if len(result[2]) < 3800:
                 await self.send_message(reaction.message.channel, f"Errors:\n```bash\n{result[2]}```", delete_after=300)
             else:
@@ -249,7 +249,7 @@ class Commands(commands.Cog):
         else:
             moderator = True
 
-        description=""
+        description = ""
         i = 1
 
         # Adds server to description if the user has access to any of it's commands
@@ -262,13 +262,13 @@ class Commands(commands.Cog):
                 description += f"`{i}.` {server.name}\n"
             i += 1
 
-        if description == "" and len(self.bot.servers) == 0:
+        if description == "" or len(self.bot.servers) == 0:
             if len(self.bot.servers) == 0:
-                await send(self.bot, ctx.channel, description="There aren't any servers set up yet")
+                await send(self.bot, ctx.channel, "There aren't any servers set up yet")
             else:
-                await send(self.bot, ctx.channel, description="You don't have access to any of the current servers")
+                await send(self.bot, ctx.channel, "You don't have access to any of the current servers")
         else:
-            await send(self.bot, ctx.channel, description=description)
+            await send(self.bot, ctx.channel, description)
 
 
     ###############
@@ -322,9 +322,7 @@ class Commands(commands.Cog):
         if user.bot:
             return
 
-        if reaction.emoji in self.pages:
-            await self.handle_pages()
-        else:
+        if reaction.emoji in self.emoji:
             await self.handle_reactions(reaction, user)
 
 

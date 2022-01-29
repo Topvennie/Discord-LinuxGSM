@@ -124,9 +124,6 @@ def parse_settings() -> Tuple[str, str, Activity, int, int, int, int, Color]:
     if guild == 0:
         exit("A server id is required.")
 
-    if head_admin != 0 and admin != 0 and moderator != 0:
-        exit(f"You need to set at least one staff role.")
-
     # embed colour
     embed_colour_data = data["embed colour"]
 
@@ -184,9 +181,9 @@ def parse_commands() -> dict:
             continue
         strip_user_input = strip_user_input[1]
 
-        command = data[command]["command"]
+        actual_command = data[command]["command"]
 
-        all_commands[command] = [server_command, command, require_path, strip_user_input]
+        all_commands[command] = [server_command, actual_command, require_path, strip_user_input]
         
     return all_commands
 
@@ -239,21 +236,26 @@ def parse_servers(template_commands:dict) -> List[Server]:
                 continue
 
             if data[server_keyname]["commands"][command_data]["command"] not in template_commands:
-                print_to_console(f"'{command_data}' will not be added to '{server_name}' as the command is not in commands.json")
+                print_to_console(f"'{command_data}' will not be added to '{server_name}' as the command '{data[server_keyname]['commands'][command_data]['command']}' is not in commands.json")
                 continue
 
             command_name = data[server_keyname]["commands"][command_data]["name"]
             command_user = data[server_keyname]["commands"][command_data]["user"]
+            command_command = data[server_keyname]["commands"][command_data]["command"]
 
-            if template_commands[command_data][2]:
-                command_path = data[server_keyname]["commands"][command_data]["path"]
+            if template_commands[data[server_keyname]['commands'][command_data]['command']][2]:
+                try:
+                    command_path = data[server_keyname]["commands"][command_data]["path"]
+                except KeyError:
+                    print_to_console(f"'{command_data}' will not be added to '{server_name}' as the command '{data[server_keyname]['commands'][command_data]['command']}' requires a path")
+                    continue
                 # Format path if it's a relative path
                 if command_path.startswith("./"):
                     command_path = server_path[:server_path.rfind("/")] + command_path[1:]
             else:
                 command_path = server_path
 
-            command = Command(command_name, data[server_keyname]["commands"][command_data]["command"], command_user, template_commands[command_data][1], command_path, template_commands[command_data][3])
+            command = Command(command_name, template_commands[command_command][0], command_user, template_commands[command_command][1], command_path, template_commands[command_command][3])
 
             if command_name in head_admin_commands:
                 server.add_head_admin_command(command)
@@ -261,6 +263,8 @@ def parse_servers(template_commands:dict) -> List[Server]:
                 server.add_admin_command(command)
             elif command_name in moderator_commands:
                 server.add_moderator_command(command)
+            else:
+                print_to_console(f"'{command_name}' will not be added to '{server_name}' because it's not added to the head admin, admin or moderators commands")
 
             if not has_commands:
                 has_commands = True
